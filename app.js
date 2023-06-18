@@ -75,3 +75,59 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 // - Pour retourner une réponse HTTP au format JSON, on utilise la méthode json() fournie par Express.
 // - Cette méthode s’occupe pour nous de structurer nos données au format JSON, 
 //et d’attribuer le type MIME application/json dans la requête de retour.
+
+
+
+
+// commande à effectuer dans le terminal
+// --------------------------------------------------------------------------------------------------------
+// // ouvrir terminal sur vscode 
+// ctr +%
+
+// // vérifier les versions
+// node -v
+// nom -v
+
+// // éxécution du script app.js et affichage sur le terminal
+// node app.js
+
+// rq : app.js est le script  de point d’entrée d’application
+
+// // créer un fichier package.json 
+// npm init
+
+// // package.json
+// on écrit start à la place de test et node app.js
+
+// npm run start (équivaut maintenant à node app.js)
+
+// // installation de dépendance (ici express qui est utilisé pour créé une api rest avec node)
+// npm install express –save
+
+// → téléchargement et installation de la librairie express (dans node_modules) qui est nouvellement créer. Mais aussi des dépendances de express en regardant le fichier json. La librairie express est donc adaptable à notre projet.
+
+// Rq : l’option save permet de rajouter express dans la liste des dépendances écrit dans le fichier package.json
+
+// // démarrer l’api rest
+// npm run start
+
+// // couper l’api rest
+// ctrl + c
+
+// // relancer 
+// npm run start
+
+// // rafraichir l’oordinateur
+
+// // pour éviter cela installation de nodemon
+// npm install --save-dev nodemon
+
+// // remodifier le package.json en remplaçant dans le start node par nodemon
+// npm run start (va lancer nodemon app.js)
+
+// remarque: je n'ai pas push le node_module
+// pour git clone écrire la commande 
+// npm install 
+//( On demande tout simplement à NPM d’installer les dépendances listées dans le fichier package.json, ou plutôt celles du fichier package-lock.json)
+
+// --------------------------------------------------------------------------------------------------------
