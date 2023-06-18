@@ -1,0 +1,16 @@
+{
+  "name": "node-server_dsi_api",
+  "version": "1.0.0",
+  "description": "an awesome API rest ",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "mc",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": { 
+  }
+}
