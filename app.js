@@ -5,12 +5,12 @@ const express = require('express') //1 importation du paquet express en allant l
 const morgan = require('morgan') //11 importation du module morgan (après avoir tapé npm install morgan --save-dev dans le terminal)
 const favicon = require('serve-favicon') //13 importation du middleware serve-favicon 13 npm  install serve-favicon --save
 const bodyParser = require('body-parser') //17 importation du middleware qui permet le parsing 
-const {Sequelize, DataTypes} = require('sequelize') // 20 22 principal interlocuteur pour intéragir avec base de données depuis l'api rest
-const {success, getUniqueId} = require('./helper') //6 et 16 affectation destructurée, on importe la fonction/méthode success plutot que d'importer le module helper
-const mysql = require('mysql')
-let pokemons = require('./mock-pokemon')
-const PokemonModel = require('./src/models/pokemon') //22 Pour mettre en place la synchronisation entre nos model sequalize et le model de la base de données
-
+//const {Sequelize, DataTypes} = require('sequelize') // 20 22 principal interlocuteur pour intéragir avec base de données depuis l'api rest
+//const {success, getUniqueId} = require('./helper') //6 et 16 affectation destructurée, on importe la fonction/méthode success plutot que d'importer le module helper
+//const mysql = require('mysql')
+//let pokemons = require('./src/models/db/mock-pokemon')
+//const PokemonModel = require('./src/models/pokemon') //22 Pour mettre en place la synchronisation entre nos model sequalize et le model de la base de données
+const sequelize = require('./src/db/sequelize')
 
 const app = express() //1 on crée une instance de l'application express grace à la méthode du même nom (il s'agit du serveur web sur lequel va fonctionner notre api rest)
 const port = 3000 //1 port sur lequel nous allons démarrer notre api rest
@@ -29,23 +29,23 @@ const port = 3000 //1 port sur lequel nous allons démarrer notre api rest
 // })
 
 //--------------------------------------------------------------------------------------------------
-const sequelize = new Sequelize(
-        'pokedex',
-        'root',
-        'root',
-        {
-                host: 'localhost',
-                dialect: 'mysql',
-                dialectOptions: {
-                        timezone: 'Etc/GMT-2'
-                },
-                logging:false
-        }
-)
+// const sequelize = new Sequelize(
+//         'pokedex',
+//         'root',
+//         'root',
+//         {
+//                 host: 'localhost',
+//                 dialect: 'mysql',
+//                 dialectOptions: {
+//                         timezone: 'Etc/GMT-2'
+//                 },
+//                 logging:false
+//         }
+// )
 
-sequelize.authenticate() //19 tester si la connexion à la base de données a été réussi. méthode authenticate de notre instance sequelize
-        .then(_ => console.log('La connexion à la base de données à bien été établie'))
-        .catch(error => console.error(`Impossible de se connecter à la base de données ${error}`))
+// sequelize.authenticate() //19 tester si la connexion à la base de données a été réussi. méthode authenticate de notre instance sequelize
+//         .then(_ => console.log('La connexion à la base de données à bien été établie'))
+//         .catch(error => console.error(`Impossible de se connecter à la base de données ${error}`))
 
         //20 Database Abstraction: Sequelize provides an abstraction layer between your application and the database.
         //20 Instead of writing raw SQL queries, you can work with JavaScript code and use Sequelize's methods and 
@@ -53,22 +53,34 @@ sequelize.authenticate() //19 tester si la connexion à la base de données a é
         //20  This abstraction makes it easier to work with databases and reduces the need to write complex SQL statements.
 
 //--------------------------------------------------------------------------------------------------
-const Pokemon = PokemonModel(sequelize, DataTypes) //22 on instancie notre model PokemonModel 
+// const Pokemon = PokemonModel(sequelize, DataTypes) //22 on instancie notre model PokemonModel 
 
-sequelize.sync({force: true}) //22 synchroniser notre demande avec l'état de la base de donnée , synchronise tous nos model de sequelize avec la base de données
-        .then(_ =>{ 
-                console.log('La base de données "Pokedex" a bien été synchronisé.')
+// sequelize.sync({force: true}) //22 synchroniser notre demande avec l'état de la base de donnée , synchronise tous nos model de sequelize avec la base de données
+//         .then(_ =>{ 
+//                 console.log('La base de données "Pokedex" a bien été synchronisé.')
 
 
-                //22 création d'un nouveau pokemon
-Pokemon.create({
-        name: 'Bulbizarre',
-        hp:25,
-        cp:5,
-        picture: 'https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png',
-        types: ["Plante","Poison"].join()
-}).then(bulbizarre => console.log(bulbizarre.toJSON())) //22 traitement asynchrone
-        })
+//                 //22 création d'un nouveau pokemon
+// Pokemon.create({
+//         name: 'Bulbizarre',
+//         hp:25,
+//         cp:5,
+//         picture: 'https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png',
+//         types: ["Plante","Poison"].join()
+// }).then(bulbizarre => console.log(bulbizarre.toJSON())) //22 traitement asynchrone
+
+
+//23 création de nouveaux pokemons 
+// pokemons.map(pokemon => { 
+//         Pokemon.create({
+//                 name: pokemon.name,
+//                 hp:pokemon.hp,
+//                 cp:pokemon.cp,
+//                 picture:pokemon.picture,
+//                 types:pokemon.types.join()
+//                 }).then(bulbizarre => console.log(bulbizarre.toJSON()))
+//         })
+//  })
 
 app
    .use(favicon(__dirname + '/favicon.ico')) //13 appel de la méthode app.use afin d'utiliser le nouveau middleware
@@ -79,7 +91,7 @@ app
 
 
 //1 route vide qui permet de tester si l'api rest est bien démarré
-app.get('/', (req,res)=> res.send('Hello again, Express!')) // notre premier end point (point de terminaison)
+//app.get('/', (req,res)=> res.send('Hello again, Express!')) // notre premier end point (point de terminaison)
 //1 app instance de notre application express
 //1 Lorsqu'une requête GET est envoyée à une API, elle demande au serveur de renvoyer la représentation d'une ressource spécifique ou d'une collection de ressources.
 //1 la méthode de la requete, méthode get va prendre en paramètre deux éléments 
@@ -90,64 +102,64 @@ app.get('/', (req,res)=> res.send('Hello again, Express!')) // notre premier end
                 //1 et à contrario l'objet res correspond à réponse cad l'objet que l'on doit renvoyer depuis express à notre client ) Dans notre cas nous utilisons la méthode send de l'objet response afin de retourner le message hello express au client
 
 //1 route qui retourne un premier pokemon
-app.get('/api/pokemons/:id', (req,res) => { //1 on remplace 1 qui est une valeur en dure par une valeur dynamique qui est :id
-        const id = parseInt(req.params.id) //1 on récupère l'identifiant contenu dans l'url
-        const pokemon = pokemons.find(pokemon => pokemon.id === id) //find() Returns the value of the first element in the array where predicate is true, and undefined otherwise.
-        const message = "Un pokemon a bien été trouvé." // 5
-        // res.send(`Vous avez demandé le pokémon n°${id} dont le nom est ${pokemon.name} `) //1 ici renvoit une chaine de caractère
-        //res.json(pokemon) //3 utilisation de la méthode json (à la place de send) pour retourner une réponse sous format json et retourner le type mime sous format json
-        // 3 dans le corps de la réponse http, nous passons un objet JS qui est "pokemon" 
-        //ainsi grâce à res on retourne une réponse http et on la met au format json avec json() enfin nous renvoyons des informations concret de pokemon grace à la variable pokemon
-        //res.json(helper.success(message,pokemon)) //5 on utilise la méthode success afin de retourner une réponse parfaitement structuré
-                                                // deux paramètres: le message descriptif , les données brutes du pokemon qu'à demandé l'utilisateur
-        res.json(success(message,pokemon)) //6 on appelle la fonction helper sans devoir importer tout le module helper grâce à l'affectation destructurée {}                                    
-                                        } ) //6 ceci est un end point renvoyant une réponse json
+// app.get('/api/pokemons/:id', (req,res) => { //1 on remplace 1 qui est une valeur en dure par une valeur dynamique qui est :id
+//         const id = parseInt(req.params.id) //1 on récupère l'identifiant contenu dans l'url
+//         const pokemon = pokemons.find(pokemon => pokemon.id === id) //find() Returns the value of the first element in the array where predicate is true, and undefined otherwise.
+//         const message = "Un pokemon a bien été trouvé." // 5
+//         // res.send(`Vous avez demandé le pokémon n°${id} dont le nom est ${pokemon.name} `) //1 ici renvoit une chaine de caractère
+//         //res.json(pokemon) //3 utilisation de la méthode json (à la place de send) pour retourner une réponse sous format json et retourner le type mime sous format json
+//         // 3 dans le corps de la réponse http, nous passons un objet JS qui est "pokemon" 
+//         //ainsi grâce à res on retourne une réponse http et on la met au format json avec json() enfin nous renvoyons des informations concret de pokemon grace à la variable pokemon
+//         //res.json(helper.success(message,pokemon)) //5 on utilise la méthode success afin de retourner une réponse parfaitement structuré
+//                                                 // deux paramètres: le message descriptif , les données brutes du pokemon qu'à demandé l'utilisateur
+//         res.json(success(message,pokemon)) //6 on appelle la fonction helper sans devoir importer tout le module helper grâce à l'affectation destructurée {}                                    
+//                                         } ) //6 ceci est un end point renvoyant une réponse json
 
 // app.get('/api/pokemons',(req,res) =>{
 //         res.send(`Il y a ${pokemons.length} pokémons dans le pokédex pour le moment.`) // proriété length pour retourner la longeur de l'objet pokemons
 // })
 
-app.get('/api/pokemons',(req,res) =>{
-        const message = "la liste de pokémon a bien été récupérée"
-        res.json(success(message,pokemons)) // 7 on récupère la liste des pokemons en entier (dans la partie data on a un tableau avec tout les pokemons)
-})
+// app.get('/api/pokemons',(req,res) =>{
+//         const message = "la liste de pokémon a bien été récupérée"
+//         res.json(success(message,pokemons)) // 7 on récupère la liste des pokemons en entier (dans la partie data on a un tableau avec tout les pokemons)
+// })
 
 
 // 15 ajouter un nouveau pokemon
 // 15point de terminaison qui accepte la requette http suivante post
-app.post('/api/pokemons', (req,res) => { //15 on défini l'action post auprès d'express ainsiq eu l'url associé
-        const id = getUniqueId(pokemons) //16
-        const pokemonCreated = { ...req.body, ...{id :id, created:new Date()}} //15 on fusionne les données du pokemon reçu via la réponse http entrante avec l'idientifiant unique qu'on a généré et on ajoute la date de création
-        pokemons.push(pokemonCreated) // 15 on ajoute les données de ce pokemon complet à la liste de polemons déjà existant
-        const message = `Le pokemon ${pokemonCreated.name} a bien été crée.` //15 message de confirmation pour notre consommateur d'api rest
-        res.json(success(message, pokemonCreated)) // 15 réponse json
+// app.post('/api/pokemons', (req,res) => { //15 on défini l'action post auprès d'express ainsiq eu l'url associé
+//         const id = getUniqueId(pokemons) //16
+//         const pokemonCreated = { ...req.body, ...{id :id, created:new Date()}} //15 on fusionne les données du pokemon reçu via la réponse http entrante avec l'idientifiant unique qu'on a généré et on ajoute la date de création
+//         pokemons.push(pokemonCreated) // 15 on ajoute les données de ce pokemon complet à la liste de polemons déjà existant
+//         const message = `Le pokemon ${pokemonCreated.name} a bien été crée.` //15 message de confirmation pour notre consommateur d'api rest
+//         res.json(success(message, pokemonCreated)) // 15 réponse json
 
-}) //16 point de terminaison permettant d'ajouter un nouveau  pokémon directement dans notre api rest
+// }) //16 point de terminaison permettant d'ajouter un nouveau  pokémon directement dans notre api rest
 // plus tard c'est notre base de données mysql qui se chargera de donnée un identifiant unique (là on l'a fait à la main)
 
-app.put('/api/pokemons/:id',(req,res) => { // 18 pour éviter effet  bore (collision) on fait la modification sur le pokémon côté client et non côté serveur
-        const id = parseInt(req.params.id)
-        const pokemonUpdated = {...req.body, id:id}
-        pokemons = pokemons.map(pokemon => { // 18 modification du pokémon en lui-même: on met à jour notre liste globale de pokemon en remplaçant l'ancien pokemon par la liste avec les nouveaux pokémons modifiés
-                return pokemon.id === id ? pokemonUpdated : pokemon //18 pour chaque pokemon de la liste on reetourne le même pokémon sauf s'il s'agit du pokémon a modifier
-        })
-        const message = `Le pokémon ${pokemonUpdated.name} a bien été modifié.` // 18 si pas .name on a l'objet object de pokemon
-        res.json(success(message, pokemonUpdated))
-})
+// app.put('/api/pokemons/:id',(req,res) => { // 18 pour éviter effet  bore (collision) on fait la modification sur le pokémon côté client et non côté serveur
+//         const id = parseInt(req.params.id)
+//         const pokemonUpdated = {...req.body, id:id}
+//         pokemons = pokemons.map(pokemon => { // 18 modification du pokémon en lui-même: on met à jour notre liste globale de pokemon en remplaçant l'ancien pokemon par la liste avec les nouveaux pokémons modifiés
+//                 return pokemon.id === id ? pokemonUpdated : pokemon //18 pour chaque pokemon de la liste on reetourne le même pokémon sauf s'il s'agit du pokémon a modifier
+//         })
+//         const message = `Le pokémon ${pokemonUpdated.name} a bien été modifié.` // 18 si pas .name on a l'objet object de pokemon
+//         res.json(success(message, pokemonUpdated))
+// })
 
 
 
-app.delete('/api/pokemons/:id', (req, res) => {// 19 on supprime le pokemon grace à find et filter
-        const id = parseInt(req.params.id)
-        const pokemonDeleted = pokemons.find(pokemon => pokemon.id === id)
-        pokemons = pokemons.filter(pokemon => pokemon.id !== id) //19 on obtient en retour une liste nouvelle mais sans le pokemon supprimé
-        const message = `Le pokémon ${pokemonDeleted.name} a bien été supprimé.`
-        res.json(success(message, pokemonDeleted)) // 19 on retourne ici le pokémon supprimé au client
-      });
+// app.delete('/api/pokemons/:id', (req, res) => {// 19 on supprime le pokemon grace à find et filter
+//         const id = parseInt(req.params.id)
+//         const pokemonDeleted = pokemons.find(pokemon => pokemon.id === id)
+//         pokemons = pokemons.filter(pokemon => pokemon.id !== id) //19 on obtient en retour une liste nouvelle mais sans le pokemon supprimé
+//         const message = `Le pokémon ${pokemonDeleted.name} a bien été supprimé.`
+//         res.json(success(message, pokemonDeleted)) // 19 on retourne ici le pokémon supprimé au client
+//       });
 
 
-
-
+sequelize.initDb()
+// ici nous placerons nos futurs points de terminaison
 
 
 
