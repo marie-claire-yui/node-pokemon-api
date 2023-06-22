@@ -1,12 +1,15 @@
+
+
 const express = require('express') //1 importation du paquet express en allant le chercher (la dépendance express) dans le dossier node_modules
 //const helper = require('./helper.js') //5 importation du nouveau module helper
 const morgan = require('morgan') //11 importation du module morgan (après avoir tapé npm install morgan --save-dev dans le terminal)
 const favicon = require('serve-favicon') //13 importation du middleware serve-favicon 13 npm  install serve-favicon --save
 const bodyParser = require('body-parser') //17 importation du middleware qui permet le parsing 
-const {Sequelize} = require('sequelize') // 20 
+const {Sequelize, DataTypes} = require('sequelize') // 20 22 principal interlocuteur pour intéragir avec base de données depuis l'api rest
 const {success, getUniqueId} = require('./helper') //6 et 16 affectation destructurée, on importe la fonction/méthode success plutot que d'importer le module helper
 const mysql = require('mysql')
 let pokemons = require('./mock-pokemon')
+const PokemonModel = require('./src/models/pokemon') //22 Pour mettre en place la synchronisation entre nos model sequalize et le model de la base de données
 
 
 const app = express() //1 on crée une instance de l'application express grace à la méthode du même nom (il s'agit du serveur web sur lequel va fonctionner notre api rest)
@@ -34,7 +37,7 @@ const sequelize = new Sequelize(
                 host: 'localhost',
                 dialect: 'mysql',
                 dialectOptions: {
-                        timezone: 'Etc/GHT-2'
+                        timezone: 'Etc/GMT-2'
                 },
                 logging:false
         }
@@ -43,7 +46,29 @@ const sequelize = new Sequelize(
 sequelize.authenticate() //19 tester si la connexion à la base de données a été réussi. méthode authenticate de notre instance sequelize
         .then(_ => console.log('La connexion à la base de données à bien été établie'))
         .catch(error => console.error(`Impossible de se connecter à la base de données ${error}`))
+
+        //20 Database Abstraction: Sequelize provides an abstraction layer between your application and the database.
+        //20 Instead of writing raw SQL queries, you can work with JavaScript code and use Sequelize's methods and 
+        //20 syntax to perform common database operations like querying, inserting, updating, and deleting records.
+        //20  This abstraction makes it easier to work with databases and reduces the need to write complex SQL statements.
+
 //--------------------------------------------------------------------------------------------------
+const Pokemon = PokemonModel(sequelize, DataTypes) //22 on instancie notre model PokemonModel 
+
+sequelize.sync({force: true}) //22 synchroniser notre demande avec l'état de la base de donnée , synchronise tous nos model de sequelize avec la base de données
+        .then(_ =>{ 
+                console.log('La base de données "Pokedex" a bien été synchronisé.')
+
+
+                //22 création d'un nouveau pokemon
+Pokemon.create({
+        name: 'Bulbizarre',
+        hp:25,
+        cp:5,
+        picture: 'https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png',
+        types: ["Plante","Poison"].join()
+}).then(bulbizarre => console.log(bulbizarre.toJSON())) //22 traitement asynchrone
+        })
 
 app
    .use(favicon(__dirname + '/favicon.ico')) //13 appel de la méthode app.use afin d'utiliser le nouveau middleware
@@ -263,4 +288,4 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 // Il est également possible de les faire communiquer entre eux, en leur transmettant leurs paramètres respectifs.
 // L’ordre de déclaration des Middlewares a une importance. 
 //Il faut être particulièrement attentif si certains traitements doivent être effectués avant d’autres, 
-//et ajuster l’ordre de déclaration des Middlewares en conséquence.
+//et ajuster l’ordre de déclaration des Middlewares en conséquence. 
