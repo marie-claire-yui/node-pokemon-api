@@ -37,3 +37,11 @@ exports.success = (message, data) => {
     return {message,data}
 }
 
+//15 méthode de génération d'identifiants (méthode outil) unique lors de l'ajout d'un nouveau pokémon
+exports.getUniqueId= (pokemons) => {
+    const pokemonsIds = pokemons.map(pokemon => pokemon.id) // 15 on transforme le tableau des pokemons en un tableau d'identifiant de pokemons map qui fontionne comme un for mais en retournant un nouveau tableau
+    const maxId = pokemonsIds.reduce((a,b) => Math.max(a,b)) // 15 on calcule l'identifiant existant le plus grand (reduce permet de comparer les éléments 2 à 2 dans un tableau) on a ici le max id
+    const uniqueId = maxId + 1 // 15 on incrémente max Id de 1
+
+    return uniqueId
+}
