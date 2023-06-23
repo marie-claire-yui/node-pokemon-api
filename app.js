@@ -159,9 +159,12 @@ app
 
 
 sequelize.initDb()
-// ici nous placerons nos futurs points de terminaison
-
-
+// // ici nous placerons nos futurs points de terminaison
+// const findAllPokemons = require('./src/routes/findAllPokemons') // 24 on importe notre point de terminaison qui est exporté sous la forme d'une fonction
+// findAllPokemons(app) // 24 on met en place une  nouvelle route auprès d'express, app est notre application express
+require('./src/routes/findAllPokemons')(app) //24 raccourci de syntax
+require('./src/routes/findPokemonByPk')(app) //25
+require('./src/routes/createPokemon')(app) //26 
 
 
 app.listen(port, () => console.log(`Notre application Node est démarrée sur: http://localhost:${port}`)) //1 on démarre l'api rest sur le port 3000 et on affiche un message de confirmation sur le terminal de commande grace à la méthode listen fournit par express
