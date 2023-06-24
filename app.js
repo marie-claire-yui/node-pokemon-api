@@ -165,7 +165,8 @@ sequelize.initDb()
 require('./src/routes/findAllPokemons')(app) //24 raccourci de syntax
 require('./src/routes/findPokemonByPk')(app) //25
 require('./src/routes/createPokemon')(app) //26 
-
+require('./src/routes/updatePokemon')(app) //27
+require('./src/routes/deletePokemon')(app) //28 
 
 app.listen(port, () => console.log(`Notre application Node est démarrée sur: http://localhost:${port}`)) //1 on démarre l'api rest sur le port 3000 et on affiche un message de confirmation sur le terminal de commande grace à la méthode listen fournit par express
 
@@ -304,3 +305,9 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 // L’ordre de déclaration des Middlewares a une importance. 
 //Il faut être particulièrement attentif si certains traitements doivent être effectués avant d’autres, 
 //et ajuster l’ordre de déclaration des Middlewares en conséquence. 
+
+
+
+//30 Nous venons de mettre en place un back end complet
+// un serveur développé avec node javascript 
+// une api rest réalisé avec express et directement relié avec une bdd sql

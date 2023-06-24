@@ -23,7 +23,13 @@ module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction q
       },
       types: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        get(){ // 26 getter: format pour base de donénes --> API Rest
+          return this.getDataValue('types').split(',')
+        },
+        set(types){ // 26 Setter: format de l'API Rest --> base de données
+          this.setDataValue('types',types.join())
+        }
       }
     }, {
       timestamps: true,
