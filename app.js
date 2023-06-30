@@ -159,7 +159,7 @@ app
 
 
 sequelize.initDb()
-// // ici nous placerons nos futurs points de terminaison
+// // ici nous placerons nos futurs points de terminaison (déclaration de nos routes)
 // const findAllPokemons = require('./src/routes/findAllPokemons') // 24 on importe notre point de terminaison qui est exporté sous la forme d'une fonction
 // findAllPokemons(app) // 24 on met en place une  nouvelle route auprès d'express, app est notre application express
 require('./src/routes/findAllPokemons')(app) //24 raccourci de syntax
@@ -167,6 +167,19 @@ require('./src/routes/findPokemonByPk')(app) //25
 require('./src/routes/createPokemon')(app) //26 
 require('./src/routes/updatePokemon')(app) //27
 require('./src/routes/deletePokemon')(app) //28 
+
+// 32 On ajoute la gestion des erreurs 404 en ajoutant une fonction middleware
+// 32 express va intercepter toutes les demandes du client qui ne correspondent pas à une route déclarée précédemment 
+app.use(({res}) => {
+        const message = 'Impossible de trouver la ressource demandée! Vosu pouvez essayer ue autre URL.'
+        res.status(404).json({message}) // 32 méthode status d'express pour définir un status à notre réponse, prend en param le code de statut http à retourner à notre client
+})
+
+// 33 erreurs éventuelles lorsqu'un utilisateur appelle un point de terminaison existant dans notre api rest
+// 33 celui qui permet de récupérer notre liste de pokemon
+
+
+
 
 app.listen(port, () => console.log(`Notre application Node est démarrée sur: http://localhost:${port}`)) //1 on démarre l'api rest sur le port 3000 et on affiche un message de confirmation sur le terminal de commande grace à la méthode listen fournit par express
 
@@ -311,3 +324,19 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 //30 Nous venons de mettre en place un back end complet
 // un serveur développé avec node javascript 
 // une api rest réalisé avec express et directement relié avec une bdd sql
+
+
+// 31 il existe des erreurs de type programmation et des erreurs de types operationnelles
+// 31 code de statut http attaché aux réponses 
+        // 1xx l'information, (communique des informations au niveua du protocole de transfert en lui même, aucune données n'est échangé entre le client et le serveur = metadonnées)
+        // 2xx  le succès, la requête du client a été accepté et traité avec succès
+        // 3xx la redirection, indique que le client souhaite acceder à une ressource qui a été déplacé
+        // 4xx Erreur du client, il demande une ressource qui n'existe pas 404 ou une ressource qu'il n'a pas le droit d'accéder 401
+        // 5xx erreur du serveur, le serveur n'est pas en état de servir une réponse au client ex panne du serveur
+
+        // 200 tout à fonctionné correctement et une réponse valide a été retournée
+        // 400 lorsque le client a fait une erreur générale 
+                // 404 le client demande une ressource qui n'existe pas en bdd (absence de traitement) --> onne peut pas utilisé le middleware de gestion d'erreur interne à express (express tente d'executer toutes les routes déclarées mais aucune de répond)
+                // 401 le client demande une ressource dont il n'est pas authentifié
+                // 403 le client s'est authentifié mais n'est pas autorisé
+        // 500 lorsque c'est la faute du serveur et que l'api rest est incapable de retourner une réponse au client
