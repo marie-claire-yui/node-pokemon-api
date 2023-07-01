@@ -37,3 +37,9 @@ module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction q
       updatedAt: false
     })
   }
+
+  // 37 chaque champ possède au moins deux information: 1 type, et le fait de ne pas pouvoir posséder une valeur nulle
+  // 37: le pokémon doit être un champ de caractère différent de nul 
+  // 37: rq '' n'est pas considéré comme nul, ainsi que le valeur 0 concernant les points de vie
+
+  

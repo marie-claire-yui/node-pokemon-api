@@ -340,3 +340,15 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
                 // 401 le client demande une ressource dont il n'est pas authentifié
                 // 403 le client s'est authentifié mais n'est pas autorisé
         // 500 lorsque c'est la faute du serveur et que l'api rest est incapable de retourner une réponse au client
+
+// rq Si plusieurs réponses sont possibles depuis votre code JavaScript, pensé a bien utilisé l’instruction return pour couper l’exécution du code sur le serveur.
+
+//36 la validation métier
+// 36 distinguer les validateurs et les contraintes de sequelize
+// 36 validateurs: charger de la validation des modèles au niveau du code JS, même s'il existe des validateurs propres à sequelize on peut en créer nous même
+// 36 si la validation échoue dans le js alors sequalize n'enverra aucune requête sql à la bdd
+// 36 contraintes: règles définis directement au niveau bdd
+// 36 que la contrainte soit respectée ou non, une requête sql sera envoyé à la bdd par sequelize
+
+// 36 en passane par les validateurs on peut éviter d'intérroger inutilement notre base de données et donc économiser de précieuses ressources
+// 36 permet de fournir une réponse plus rapidement en économisant le délai d'une requête
