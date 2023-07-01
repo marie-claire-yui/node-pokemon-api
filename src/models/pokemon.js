@@ -7,19 +7,35 @@ module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction q
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: { //41
+          notEmpty:{ msg: 'Le nom ne peut pas être vide.'},
+          notNull: {msg :'Le nom est une propriété requise'}
+        }
       },
       hp: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        validate: { //38 ajout de deux validateur pour le type bien un nombre entier et le chammp de point de vie n'est pas nul via  not null
+          isInt: { msg: "Utilisez uniquement des nombres entiers pour les points de vie."},
+          notNull: { msg: "Les points de vie  sont une propriété requise"}
+        }
       },
       cp: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        validate:{ //41
+          isInt:{msg: 'Utilisez uniquement des nombres entiers pour les points de dégâts.'},
+          notNull: {msg : 'Les points de dégâts sont une propriété requise.'}
+        }
       },
       picture: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate:{ //41
+          isUrl:{ msg: 'Utilisez uniquement une URL valide pour l\'image.'},
+          notNull:{msg: 'L\'image est une propriété requise.'}
+        }
       },
       types: {
         type: DataTypes.STRING,
@@ -42,4 +58,3 @@ module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction q
   // 37: le pokémon doit être un champ de caractère différent de nul 
   // 37: rq '' n'est pas considéré comme nul, ainsi que le valeur 0 concernant les points de vie
 
-  

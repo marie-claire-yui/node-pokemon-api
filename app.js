@@ -352,3 +352,5 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 
 // 36 en passane par les validateurs on peut éviter d'intérroger inutilement notre base de données et donc économiser de précieuses ressources
 // 36 permet de fournir une réponse plus rapidement en économisant le délai d'une requête
+
+// rq: allowNull correspond à la fois à un validateur côté js et à la fois à une contrainte déifni côté sql lors de la génération de la bdd
