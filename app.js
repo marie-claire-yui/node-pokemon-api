@@ -347,10 +347,23 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 // 36 distinguer les validateurs et les contraintes de sequelize
 // 36 validateurs: charger de la validation des modèles au niveau du code JS, même s'il existe des validateurs propres à sequelize on peut en créer nous même
 // 36 si la validation échoue dans le js alors sequalize n'enverra aucune requête sql à la bdd
+// 36 sequalize effectue la vérification au niveau du code de notre api rest et capable de bloquer nos requêtes vers la bse de données
 // 36 contraintes: règles définis directement au niveau bdd
-// 36 que la contrainte soit respectée ou non, une requête sql sera envoyé à la bdd par sequelize
+// 36 que la contrainte soit respectée ou non, une requête sql sera envoyé à la bdd par sequelize/ requête vers bdd systèmatiquement executé par sequelize puis sql peut rejeté ou non la demande et sequelize nous informe de ce qui s'est passé
+// 36 mécanisme permettant de définir des règles côté sql plûtot que directement du côté du code js
 
 // 36 en passane par les validateurs on peut éviter d'intérroger inutilement notre base de données et donc économiser de précieuses ressources
 // 36 permet de fournir une réponse plus rapidement en économisant le délai d'une requête
 
 // rq: allowNull correspond à la fois à un validateur côté js et à la fois à une contrainte déifni côté sql lors de la génération de la bdd
+
+ //47 contrainte d'unicité bien en place côté bdd (en effet on ne peut pas rajouter deux fois le même pokémon test thunder ou rajouter un pokémon déjà existant)
+
+
+//49  Sequelize propose deux mécanismes pour ajouter des règles de validations à vos modèles : les validateurs et les contraintes.
+//49  Les validateurs sont chargés d’effectuer la validation des modèles au niveau du code JavaScript. Si la validation échoue, alors Sequelize n’enverra aucune requête SQL à la base de données.
+//49 Les contraintes sont des règles définies directement au niveau de la base de données par Sequelize. Par exemple pour vérifier l’unicité d’une valeur en base, une contrainte sera capable d’effectuer ce contrôle, contrairement à un validateur classique.
+//49 Il existe de nombreux validateurs natifs proposés par Sequelize, qui conviennent tout à fait pour les cas de validation les plus courants.
+//49  Il est possible de créer ses propres validateurs personnalisés, qui permettent de mettre en place des scénarios de validation plus complexes, non couvert par les validateurs intégrés.
+//49  En combinant plusieurs niveaux de gestion d’erreurs (catch, code HTTP, validateurs, contraintes, ...), on est en mesure d’anticiper la majorité des erreurs qui pourraient survenir dans une API Rest. Cette gestion d’erreur est une étape indispensable pour fournir une API Rest robuste et agréable à utiliser à nos futurs utilisateurs.
+//49  Lorsqu’un développeur doit écrire une quantité importante de code pour des cas qui se produisent plutôt rarement, on parle de "code iceberg".

@@ -1,3 +1,5 @@
+const validTypes = ['Plante','Poison','Feu','Eau','Insecte','Vol','Normal','Electrik','Fée'] //44 var contenant tous le stypes autorisés pour les pokémon, on va restreindre les types qui vont être utilisés grace à une liste de types qui va être utilisé
+
 module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction qui contient param objet sequelize permettant la connexion à la base de donnée pour sequelize 
     return sequelize.define('Pokemon', { // 21 propriété define qui permet de déclarer un nouveau model auprès de sequelize 
       id: {  //21 param data types qui permet de définir le type de donnnées de chaque propriété de notre model ex name string pv int
@@ -8,6 +10,11 @@ module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction q
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+         // 46 RQ: l'idel serait d'avoir que des validateurs mais des fois il n y  a pas d'autre choix que de passer par des contraintes sql
+        // 46 ex contrainte d'unicité fourni par sequelize: contrainte sequelize. modif du script en create et update pour les erreurs 400 pour l'unicité
+        unique: { 
+          msg: 'Le nom est déjà pris'
+        },
         validate: { //41
           notEmpty:{ msg: 'Le nom ne peut pas être vide.'},
           notNull: {msg :'Le nom est une propriété requise'}
@@ -18,6 +25,14 @@ module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction q
         allowNull: false,
         validate: { //38 ajout de deux validateur pour le type bien un nombre entier et le chammp de point de vie n'est pas nul via  not null
           isInt: { msg: "Utilisez uniquement des nombres entiers pour les points de vie."},
+          min: { //42
+            args: [0],
+            msg: 'Les points de vie doivent être supérieures ou égales à 0.'
+          },
+          max: {
+            args: [999],
+            msg: 'Les points de vie doivent être inférieures ou égales à 999.'
+          },
           notNull: { msg: "Les points de vie  sont une propriété requise"}
         }
       },
@@ -26,6 +41,14 @@ module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction q
         allowNull: false,
         validate:{ //41
           isInt:{msg: 'Utilisez uniquement des nombres entiers pour les points de dégâts.'},
+          min: { //42 
+            args: [0],
+            msg: 'Les points de dégâts doivent être supérieures ou égales à 0.'
+          },
+          max: {
+            args: [99],
+            msg: 'Les points de dégâts doivent être inférieures ou égales à 99.'
+          },
           notNull: {msg : 'Les points de dégâts sont une propriété requise.'}
         }
       },
@@ -45,6 +68,23 @@ module.exports = (sequelize, DataTypes) => { // 21 nous exportons une fonction q
         },
         set(types){ // 26 Setter: format de l'API Rest --> base de données
           this.setDataValue('types',types.join())
+        },
+
+       
+        validate: {
+          isTypesValid(value){ //43 on défini une fonction isTYpesValid nom arbitrairement, validateur personnalisé et non natif de sequelize
+            if(!value){ //43 prend en param une valeur value correspondant à la valeur de la propriété type contenu en base de donnée sans prendre en compte le getter et le setteur de cette propriété 
+              throw new Error('Un pokémon doit au moins avoir un type.')
+            }
+            if(value.split(',').length >3) {
+              throw new Error('Un pokémon ne peux pas avoir plus de trois types')
+            }
+            value.split(',').forEach(type => { //44 on vérifie chacun des types d'un pokémon pour savoir s'il est bien inclu dans la liste prédéfini ou non
+              if(!validTypes.includes(type)){ //44 split car les données en brute viennent directememnt de la base de données sql
+                throw new Error(`Le type d'un pokémon doit appartenir à la liste suivante: ${validTypes}`)
+              }
+            });
+          }
         }
       }
     }, {
