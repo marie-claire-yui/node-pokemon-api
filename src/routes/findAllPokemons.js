@@ -9,7 +9,7 @@ module.exports = (app) => { // 23 on exporte une fonction qui prend en param l'a
       // return Pokemon.findAll
       
       if (name.length <2){ //55 juste avant d'executer la requête de recherche il est nécessaire de tester la longueur du terme envoyé par l'utilisateur
-        const message = `Le terme de recherche doit contenir au moins 2 cractères.` //55 si la longueur est suffisemment longue alors la requête se passe comme précédemment (sans ce if)
+        const message = `Le terme de recherche doit contenir au moins 2 caractères.` //55 si la longueur est suffisemment longue alors la requête se passe comme précédemment (sans ce if)
         return res.status(400).json({message})
       }
       
