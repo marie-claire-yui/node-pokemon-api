@@ -367,3 +367,8 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 //49  Il est possible de créer ses propres validateurs personnalisés, qui permettent de mettre en place des scénarios de validation plus complexes, non couvert par les validateurs intégrés.
 //49  En combinant plusieurs niveaux de gestion d’erreurs (catch, code HTTP, validateurs, contraintes, ...), on est en mesure d’anticiper la majorité des erreurs qui pourraient survenir dans une API Rest. Cette gestion d’erreur est une étape indispensable pour fournir une API Rest robuste et agréable à utiliser à nos futurs utilisateurs.
 //49  Lorsqu’un développeur doit écrire une quantité importante de code pour des cas qui se produisent plutôt rarement, on parle de "code iceberg".
+
+// 50 query params: paramètres de requête
+// 50 paramères qu'on peut rajouter à la fin de l'url de nos points de terminaison ex name, limit, order by
+// 50 Les paramètres d''URL pour identifier des ressources
+// 50 Les paramètres de requêtes pour trier ou filtrer des ressources
