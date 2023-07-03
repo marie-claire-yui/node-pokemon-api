@@ -1,6 +1,8 @@
 const { User } = require('../db/sequelize')
 const bcrypt = require('bcrypt')
-  
+const jwt = require('jsonwebtoken') //61
+const privateKey = require('../auth/private_key')  //61
+
 module.exports = (app) => {
   app.post('/api/login', (req, res) => { //58 déclaration d'un nouvel endpoint, récupération des paramètres de l'URL
   
@@ -21,8 +23,15 @@ module.exports = (app) => {
             return res.status(401).json({message})
         }
 
+        //JWT 61
+        const token = jwt.sign( //61 méthode sign du module jsonwebtoken 3 paramètres pour engendrer un jeton JWT pourrécupération dans la constante token
+            {userId: user.id},
+            privateKey,
+            {expiresIn: '24h'}
+        )
+
         const message = `L'utilisateur a été connecté avec succès`;
-        return res.json({message, data: user})
+        return res.json({message, data: user, token}) //61 ajout token retourne la const token créer plus haut quand identifiant correcte
       })
     })
     .catch(error =>{ //59 erreur générique à la fin de notre point de terminaison: cas d'un appel réseau qui échouerai
