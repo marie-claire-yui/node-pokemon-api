@@ -383,3 +383,17 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 //54            2 sécuriser l'échange des données (consommation des endpoints en toute sécurité)
 //54            avec les bons droits!
 
+//60 un jeton JWT est une clef cryptée, avec une durée de validité, sous forme de chaînede caractères
+//60 tant que le jeton est valide on va pouvoir l'utiliser pour demander des données protégés au serveur
+//60 backend api rest de pokemon / application web capable de fonctionner dans un navigateur
+                // 1) un client effectue une requête afin de s'authentifier auprès de ntore api rest, il devrait donner un identifiant et un mot de passe au point de terminaison de connexion
+                // 2) vérifier si l'identifiant et le mot de passe sont correcte grace au module bcrypt si c'est le cas notre api rest renvoit un jeton JWT au client sinon on renvoit un message d'erreur avec le message adéquate
+                // 3) grâce au jeton JWT récupéré, le client peut maintenant effetuer des requetes sécurisé vers les endpoints de notre api rest , par contre il devra transmettre le jeton JWT pour chaque requete nécessitant d'êre authentifiée
+                // jeton JWT se transmet dans l'entête de la requete http, si le jeton n'est plus valide l'utilisateur devra en demander un nouveau
+                // 4) si le jeton JWT est valide, alors nous allons devoir renvoyer les données demandés au client sinon  on lui refuse l'accès aux données qu'il a demandé
+
+// 61 dans le terminal npm  install jsonwebtoken --save
+//61 générer un jeton JWT valide
+        //1) les informations de l'utilisateur: identifiant unique de l'utilisateur qui va permettre de créer un jeton uniquement valide pour se client (personnel pour chaque utilisateur)
+        //2) clé secrète externe lors du cryptage de jeton sous forme de chaine de caractèrepour renforcer la sécurité
+        //3) date de validité du jeton ex:24h
