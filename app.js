@@ -167,6 +167,7 @@ require('./src/routes/findPokemonByPk')(app) //25
 require('./src/routes/createPokemon')(app) //26 
 require('./src/routes/updatePokemon')(app) //27
 require('./src/routes/deletePokemon')(app) //28 
+require('./src/routes/login')(app) //58 déclaration de notre endpoint d'authentification dans le point d'entrée de notre api rest app.js
 
 // 32 On ajoute la gestion des erreurs 404 en ajoutant une fonction middleware
 // 32 express va intercepter toutes les demandes du client qui ne correspondent pas à une route déclarée précédemment 
