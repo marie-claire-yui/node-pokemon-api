@@ -1,9 +1,9 @@
 const { Pokemon } = require('../db/sequelize')
 const { ValidationError, UniqueConstraintError} = require('sequelize') //39 //47
-
+const auth = require('../auth/auth') //64 importation
 
 module.exports = (app) => {
-  app.post('/api/pokemons', (req, res) => {
+  app.post('/api/pokemons', auth, (req, res) => { //64 ajout auth en deuxième paramètre
     Pokemon.create(req.body)
       .then(pokemon => {
         const message = `Le pokémon ${req.body.name} a bien été crée.`

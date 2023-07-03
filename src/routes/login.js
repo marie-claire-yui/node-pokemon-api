@@ -47,3 +47,13 @@ module.exports = (app) => {
 //59 deux types d'erreurs possibles, 1) l'utilisateur mauvais identifiant -> on peut renseigner que l'identifiant n'existe pas dans notre base de donnée 
 //59 2) id correcte mais mot de passe invalide 
 
+//65 L’authentification est un processus qui permet de restreindre l’accès aux points de terminaisons de notre API Rest.
+//65 La mise en place d’une authentification côté API Rest nécessite de respecter deux exigences principales : encrypter le mot de passe et sécuriser l’échange des données.
+//65 L’identifiant que les clients utilisent lors de l’authentification doit être unique.
+//65 Le module bcrypt permet d’encrypter les mots de passe de nos utilisateurs sous la forme d’un hash, que nous pouvons sauvegarder en base de données de manière sûre.
+//65 L’authentification entre une application web une API Rest repose sur un standard reconnu, qui est l’authentification avec les « JSON Web Token ».
+//65 Un jeton JWT est une clef cryptée, avec une durée de validité dans le temps, et qui se présente sous la forme d’une chaîne de caractères.
+//65 Le module jsonwebtoken permet de générer et vérifier la validité des jetons JWT, grâce aux méthodes sign et verify.
+//65 Pour générer un jeton JWT valide, trois informations différentes sont nécessaires : les informations de l’utilisateur, une clé secrète, et une date de validité pour le jeton.
+//65 Le jeton JWT transite dans l’en-tête HTTP authorization, avec pour valeur "Bearer <JWT>".
+//65 Il ne faut pas appliquer le Middleware d’authentification sur le point de terminaison de la connexion, sinon cela empêche tous les utilisateurs d’accéder à notre API Rest.

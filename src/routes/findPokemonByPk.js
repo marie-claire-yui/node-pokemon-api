@@ -1,7 +1,8 @@
 const { Pokemon } = require('../db/sequelize') // 25 
-  
+const auth = require('../auth/auth') //64
+
 module.exports = (app) => {
-  app.get('/api/pokemons/:id', (req, res) => {
+  app.get('/api/pokemons/:id',auth, (req, res) => { //64 ajout de auth en deuxième argument
     Pokemon.findByPk(req.params.id) // 25 méthode qui est une promesse qui retourne les info demandées (un seul pok) méthode de ntore model pokemon 
       .then(pokemon => {
         if(pokemon === null){ //rq pour sequelize plus besoin de la méthode parseInt

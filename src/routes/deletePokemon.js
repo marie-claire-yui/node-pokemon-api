@@ -1,7 +1,8 @@
 const { Pokemon } = require('../db/sequelize')
-  
+const auth = require('../auth/auth') //64 
+
 module.exports = (app) => {
-  app.delete('/api/pokemons/:id', (req, res) => {
+  app.delete('/api/pokemons/:id',auth, (req, res) => { //64 ajout de auth en deuxième argument
     Pokemon.findByPk(req.params.id).then(pokemon => { //28 on récupère le pokémon en bdd pour le retourner au client avant de le supprimer
       if (pokemon === null){
         const message = 'Le pokémon demandé n\'existe pas. Réessayez avec un autre identifiant';

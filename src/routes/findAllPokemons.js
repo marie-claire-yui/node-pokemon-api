@@ -1,8 +1,9 @@
 const { Pokemon } = require('../db/sequelize') //23 on importe dans notre point de terminaison le model pokemon fourni par notre sequelize
 const {Op} = require('sequelize') //51 utilisation de l'opérateur de sequelize
+const auth = require('../auth/auth') //64 express nous permet de passer un middleware en deuxième argument lors de la déclaration d'une nouvelle route, il ne nous reste plus qu'à importer le middleware d'authentification et de le passer en paramètre au bon endroit dans les méthodes de déclarations de points de terminaisons
 
 module.exports = (app) => { // 23 on exporte une fonction qui prend en param l'app express entière --> permet de définir les routes dans notre applications tout en ayant des points de terminaisons séparés dans plusieurs modules distinct
-  app.get('/api/pokemons', (req, res) => {
+  app.get('/api/pokemons',auth, (req, res) => { //64 en deuxième paramètre ajout de auth
     if(req.query.name){ //50 les requêtes avancées ajouté une fonctionnalité de recherche par nom        req.query.name permet d'indiquer à expres que l'on souhaite extraire le paramètre de requête name de l'url pour cela on passe par req fourni par express
       const name = req.query.name
       const limit = parseInt(req.query.limit) || 5  //54 rq: express nous transmet tous les paramètres sous formes de chaines de caractère

@@ -1,9 +1,9 @@
 const { Pokemon } = require('../db/sequelize')
 const { ValidationError, UniqueConstraintError } = require('sequelize') //40 //47
-
+const auth = require('../auth/auth') //64
   
 module.exports = (app) => {
-  app.put('/api/pokemons/:id', (req, res) => {
+  app.put('/api/pokemons/:id', auth, (req, res) => { // 64 ajout de auth en deuxième argument
     const id = req.params.id
     Pokemon.update(req.body, { //28 méthode update est ce qui permet d'appliquer les modifications en base de données
       where: { id: id }
