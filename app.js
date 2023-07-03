@@ -372,3 +372,13 @@ app.listen(port, () => console.log(`Notre application Node est démarrée sur: h
 // 50 paramères qu'on peut rajouter à la fin de l'url de nos points de terminaison ex name, limit, order by
 // 50 Les paramètres d''URL pour identifier des ressources
 // 50 Les paramètres de requêtes pour trier ou filtrer des ressources
+
+
+
+//54 demander à l'utilisateur de s'authentifier avant de pouvoir intéragir avec l'api rest
+// 54 pour cela point de terminaison dédié à cette tâche
+//54 authentification par identifiant et mot de passe
+// 54           1 encrypter le mot de passe des utilisateurs
+//54            2 sécuriser l'échange des données (consommation des endpoints en toute sécurité)
+//54            avec les bons droits!
+
