@@ -13,12 +13,14 @@ module.exports = (app) => {
         return res.status(404).json({message})
       }
       
+
         bcrypt.compare(req.body.password, user.password).then(isPasswordValid => { //58 méthode magique permet de comparer le mot de passe (en clair) saisie par l'utilisateur avec le mot de passe encrypté/sécurisé présent dans notre base de donnée
+        
         // if(isPasswordValid) { //58 si l'utilisateur saisie un mot de passe erronée ou frauduleux nous pouvons refuser l'accès à l'api rest
         //   const message = `L'utilisateur a été connecté avec succès`;
         //   return res.json({ message, data: user })
         // }
-        if(!isPasswordValid){ //59 éventualité d'un mot de passe eronné directement (l'inverse)
+        if(!isPasswordValid){  //59 éventualité d'un mot de passe eronné directement (l'inverse)
             const message = `Le mot de passe est incorrect.`;
             return res.status(401).json({message})
         }
